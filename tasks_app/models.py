@@ -20,6 +20,8 @@ class Task(models.Model):
     completed_time = models.DateTimeField(null=True, blank=True)
     status = models.CharField(max_length=20, choices=STATUS_CHOICES)
     priority = models.CharField(max_length=25, choices=PRIORITY_CHOICES)
+    author = models.ForeignKey('auth.User', on_delete=models.CASCADE, null=True, blank=True)
+    
 
     def __str__(self):
         return self.title
@@ -29,7 +31,10 @@ class Comment(models.Model):
     task = models.ForeignKey(Task, on_delete=models.CASCADE)
     comment = models.TextField()
     commented_time = models.DateTimeField(auto_now_add=True)
-    commented_by = models.CharField(max_length=100)
+    # Older comments may have a free-text author that cannot be matched to a user.
+    commented_by = models.ForeignKey(
+        'auth.User', on_delete=models.CASCADE, null=True, blank=True
+    )
 
     def __str__(self):
         return f"Comment for task: {self.task.title} at {self.commented_time}"

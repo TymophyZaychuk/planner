@@ -1,0 +1,217 @@
+
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}TaskFlow | Dashboard{% endblock %}
+
+{% block content %}
+
+<div class="dashboard">
+
+    <!-- Navigation -->
+    <nav class="dashboard-nav">
+        <a href="#" class="brand">
+            <span class="brand-icon">T</span>
+            TASKFLOW<span class="brand-dot">.</span>
+        </a>
+
+        <span class="nav-label">PERSONAL WORKSPACE</span>
+    </nav>
+
+    <!-- Welcome -->
+    <header class="welcome-section">
+            <a href="{% url 'task_create' %}" class="add-task-btn">
+        <span>+</span> New task
+            </a>
+        <div>
+            <span class="eyebrow">YOUR PRODUCTIVITY SPACE</span>
+            <h1>Stay focused.<br><span>Get things done.</span></h1>
+            <p>Organize your work and make every day productive.</p>
+        </div>
+    </header>
+
+    <!-- Statistics -->
+    <section class="stats-grid">
+
+        <div class="stat-card main-stat">
+            <div class="stat-top">
+                <span>Total tasks</span>
+                <span class="stat-icon">▤</span>
+            </div>
+            <div class="stat-number">{{ total_tasks }}</div>
+            <span class="stat-description">All your tasks</span>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-top">
+                <span>Completed</span>
+                <span class="stat-icon green">✓</span>
+            </div>
+            <div class="stat-number">{{ completed_tasks }}</div>
+            <span class="stat-description">Successfully finished</span>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-top">
+                <span>In progress</span>
+                <span class="stat-icon blue">↗</span>
+            </div>
+            <div class="stat-number">{{ in_progress_tasks }}</div>
+            <span class="stat-description">Currently working on</span>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-top">
+                <span>Pending</span>
+                <span class="stat-icon yellow">◷</span>
+            </div>
+            <div class="stat-number">{{ pending_tasks }}</div>
+            <span class="stat-description">Waiting to be started</span>
+        </div>
+
+    </section>
+
+    <!-- Progress -->
+    <section class="progress-section">
+        <div class="progress-heading">
+            <div>
+                <span class="eyebrow">YOUR PERFORMANCE</span>
+                <h2>Overall progress</h2>
+            </div>
+
+            <strong>{{ completion_rate }}%</strong>
+        </div>
+
+        <div class="progress-track">
+            <div class="progress-fill"
+                 style="width: {{ completion_rate }}%;">
+            </div>
+        </div>
+
+        <p>
+            You've completed {{ completed_tasks }} out of
+            {{ total_tasks }} tasks.
+        </p>
+    </section>
+
+    <!-- Tasks -->
+    <section class="tasks-section">
+
+        <div class="tasks-heading">
+            <div>
+                <span class="eyebrow">YOUR WORKSPACE</span>
+                <h2>My tasks <span>({{ total_tasks }})</span></h2>
+            </div>
+        </div>
+
+        <!-- Filters -->
+        <div class="task-toolbar">
+
+            <form method="GET" class="search-form">
+                <input
+                    type="text"
+                    name="search"
+                    placeholder="Search tasks..."
+                    value="{{ search_query }}"
+                >
+                <button type="submit">⌕</button>
+            </form>
+
+            <div class="filter-links">
+                <a href="{% url 'task_list' %}"
+                   class="{% if not current_status %}active{% endif %}">
+                    All
+                </a>
+
+                <a href="?status=Pending"
+                   class="{% if current_status == 'Pending' %}active{% endif %}">
+                    Pending
+                </a>
+
+                <a href="?status=In Progress"
+                   class="{% if current_status == 'In Progress' %}active{% endif %}">
+                    In progress
+                </a>
+
+                <a href="?status=Completed"
+                   class="{% if current_status == 'Completed' %}active{% endif %}">
+                    Completed
+                </a>
+            </div>
+
+        </div>
+
+        <!-- Task list -->
+        <div class="task-list">
+
+            {% for task in tasks %}
+
+                <article class="task-item">
+
+                    <div class="task-indicator
+                        indicator-{{ task.status|slugify }}">
+                    </div>
+
+                    <div class="task-main">
+
+                        <div class="task-title-row">
+                            <a href="{% url 'task_detail' task.id %}"
+                               class="task-title">
+                                {{ task.title }}
+                            </a>
+
+                            <span class="task-priority
+                                priority-{{ task.priority|slugify }}">
+                                {{ task.get_priority_display }}
+                            </span>
+                        </div>
+
+                        <p class="task-description">
+                            {{ task.description|truncatechars:110 }}
+                        </p>
+
+                        <div class="task-meta">
+                            <span>
+                                ◷ {{ task.started_time|date:"d.m.Y" }}
+                            </span>
+
+                            <span class="task-status-label
+                                label-{{ task.status|slugify }}">
+                                {{ task.get_status_display }}
+                            </span>
+                        </div>
+
+                    </div>
+
+                    <a href="{% url 'task_detail' task.id %}"
+                       class="task-arrow">
+                        →
+                    </a>
+
+                </article>
+
+            {% empty %}
+
+                <div class="empty-state">
+                    <div class="empty-icon">✦</div>
+                    <h3>No tasks found</h3>
+                    <p>
+                        There are no tasks here yet.
+                        Create a new task to get started.
+                    </p>
+                </div>
+
+            {% endfor %}
+
+        </div>
+
+    </section>
+
+    <footer class="dashboard-footer">
+        <span>TASKFLOW © 2026</span>
+        <span>PLAN · ORGANIZE · COMPLETE</span>
+    </footer>
+
+</div>
+
+{% endblock %}
