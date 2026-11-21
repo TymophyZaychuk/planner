@@ -45,43 +45,45 @@
                     {{ task.description|linebreaks }}
                 </div>
             </section>
-
+            <a href="{% url 'task_update' task.pk %}" class="add-task-btn">
+                Edit task
+            </a>
+            
             <!-- Comments -->
-            <section class="content-card comments-card">
-                <div class="card-heading">
-                    <span class="section-number">02</span>
-                    <h2>Discussion</h2>
-                    <span class="comments-count">
-                        {{ comments.count }} comments
-                    </span>
+             
+            <div class="comments-section">
+                <h2>Comments</h2>
+
+                <form method="POST">
+                    {% csrf_token %}
+
+                    <textarea
+                        name="comment"
+                        placeholder="Write your comment..."
+                        rows="4"
+                        required
+                    ></textarea>
+
+                    <button type="submit" class="add-task-btn">
+                        Post comment
+                    </button>
+                </form>
+
+                <div class="comments-list">
+                    {% for comment in comments %}
+                        <div class="comment-card">
+                            <strong>{{ comment.commented_by.username }}</strong>
+
+                            <p>{{ comment.comment }}</p>
+
+                            <small>{{ comment.commented_time|date:"d.m.Y H:i" }}</small>
+                        </div>
+                    {% empty %}
+                        <p>No comments yet.</p>
+                    {% endfor %}
                 </div>
-
-                {% for comment in comments %}
-                    <div class="comment-item">
-                        <div class="comment-avatar">
-                            {{ comment.commented_by|first|upper }}
-                        </div>
-
-                        <div class="comment-content">
-                            <div class="comment-top">
-                                <strong>{{ comment.commented_by }}</strong>
-                                <span>
-                                    {{ comment.commented_time|date:"d.m.Y H:i" }}
-                                </span>
-                            </div>
-
-                            <p>{{ comment.comment|linebreaksbr }}</p>
-                        </div>
-                    </div>
-                {% empty %}
-                    <div class="empty-comments">
-                        No comments yet. Start the discussion!
-                    </div>
-                {% endfor %}
-            </section>
-
-        </div>
-
+            </div>
+            
         <!-- Sidebar -->
         <aside class="sidebar">
 

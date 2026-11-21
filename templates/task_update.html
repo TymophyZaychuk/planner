@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Edit {{ task.title }} | TaskFlow{% endblock %}
+
+{% block content %}
+<div class="create-page">
+    <div class="create-navigation">
+        <a href="{% url 'task_detail' task.pk %}" class="back-link">← Back to task</a>
+        <span class="page-label">TASKFLOW / EDIT TASK</span>
+    </div>
+
+    <div class="create-header">
+        <span class="eyebrow">UPDATE TASK</span>
+        <h1>Edit <span>{{ task.title }}</span></h1>
+        <p>Update the task details and save your changes.</p>
+    </div>
+
+    <div class="create-form-container">
+        <form method="POST" class="task-create-form">
+            {% csrf_token %}
+            {% if form.errors %}
+                <div class="form-errors">
+                    Please check the information you entered.
+                    {{ form.errors }}
+                </div>
+            {% endif %}
+
+            <div class="form-group">
+                <label for="{{ form.title.id_for_label }}">Task title <span>*</span></label>
+                {{ form.title }}
+                {{ form.title.errors }}
+            </div>
+            <div class="form-group">
+                <label for="{{ form.description.id_for_label }}">Description <span>*</span></label>
+                {{ form.description }}
+                {{ form.description.errors }}
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="{{ form.status.id_for_label }}">Status <span>*</span></label>
+                    {{ form.status }}
+                    {{ form.status.errors }}
+                </div>
+                <div class="form-group">
+                    <label for="{{ form.priority.id_for_label }}">Priority <span>*</span></label>
+                    {{ form.priority }}
+                    {{ form.priority.errors }}
+                </div>
+            </div>
+            <div class="form-actions">
+                <span class="required-note">* Required fields</span>
+                <button type="submit" class="submit-task-btn">Save changes <span>→</span></button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

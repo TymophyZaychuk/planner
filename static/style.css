@@ -1207,3 +1207,51 @@ body {
         flex-wrap: wrap;
     }
 }
+.comments-section {
+    margin-top: 40px;
+    padding: 25px;
+    background: #1b1e19;
+    border: 1px solid #30352b;
+    border-radius: 12px;
+}
+
+.comments-section h2 {
+    color: #ccff00;
+    margin-bottom: 20px;
+}
+
+.comments-section textarea {
+    width: 100%;
+    padding: 14px;
+    background: #111310;
+    border: 1px solid #383d32;
+    border-radius: 8px;
+    color: white;
+    resize: vertical;
+    margin-bottom: 15px;
+}
+
+.comments-section textarea:focus {
+    outline: none;
+    border-color: #ccff00;
+}
+
+.comment-card {
+    padding: 18px;
+    margin-top: 15px;
+    background: #242820;
+    border-radius: 8px;
+}
+
+.comment-card strong {
+    color: #ccff00;
+}
+
+.comment-card p {
+    color: #e0e0e0;
+    margin: 10px 0;
+}
+
+.comment-card small {
+    color: #858a7d;
+}
